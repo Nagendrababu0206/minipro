@@ -1,0 +1,45 @@
+PARKVISION MODEL TRAINING DETAILS
+=================================
+
+CHECKPOINT NOW PRESENT LOCALLY
+------------------------------
+A local YOLOv8s checkpoint is present at models/best.pt. It was downloaded
+from the public Hugging Face repository dronefreak/pklot-yolov8s. The model
+card reports that it was fine-tuned on PKLot. This training provenance comes
+from the publisher; ParkVision has not independently audited its training run.
+
+The checkpoint reports these classes when loaded with Ultralytics:
+
+  0: vacant
+  1: occupied
+
+ParkVision predicts the state of a parking bay. It is not a vehicle make/model
+classifier and does not have separate classes for car, motorcycle, van, bus,
+vehicle color, or license plate. Vehicles may be visible within occupied-bay
+training examples, but the model output is the bay's occupancy class.
+
+VERIFICATION PERFORMED
+----------------------
+- Loaded models/best.pt successfully in the project virtual environment.
+- Confirmed class names: vacant and occupied.
+- Ran inference on the model publisher's PKLot showcase image.
+- Adapter output: 272 detected bays, 169 VACANT and 103 OCCUPIED.
+- The temporary source image and generated annotation were removed after the
+  smoke test.
+
+This is a compatibility smoke test on one publisher-provided example. It is
+not an independent accuracy evaluation and does not prove performance on a
+different parking lot or camera. Test representative, labelled images before
+making accuracy claims.
+
+SOURCE AND LICENSE
+------------------
+Model: https://huggingface.co/dronefreak/pklot-yolov8s
+Publisher-listed license: AGPL-3.0
+Dataset named by publisher: PKLot
+Checkpoint SHA-256:
+534895f702ad44a71c2baa8a60c6fbe5369d721dc26fed8196f1ce791c11f783
+
+The checkpoint is locally present but ignored by Git. Fresh clones must
+retrieve it separately. Review the model and dataset terms before sharing or
+redistributing model files.

@@ -1,0 +1,81 @@
+PARKVISION - IMPLEMENTED FEATURES
+=================================
+
+This file describes the current working folder. Google Maps still needs a user
+key for live testing. The local model checkpoint was loaded and smoke-tested as
+noted below.
+
+WEB APPLICATION
+--------------
+- Flask application with responsive automotive-themed pages.
+- User registration, login, logout, password hashing, session cookies and CSRF
+  checks for form submissions.
+- Protected dashboard, image analysis, analysis details, recommendations,
+  history, analytics and settings pages.
+- User-scoped analysis history and images.
+- JSON persistence with atomic file replacement and a per-user retention limit.
+- Local image upload validation for JPG/PNG, file size and image readability.
+
+PARKING IMAGE ANALYSIS
+----------------------
+- Strict YOLO checkpoint integration. A supplied checkpoint must include
+  compatible vacant/empty/free and occupied/full classes.
+- Rejects generic COCO weights as a parking occupancy model.
+- Parking slot box coordinates, slot IDs, classification labels and confidence
+  are taken from actual model inference.
+- Annotated image uses green for vacant, red for occupied and amber for
+  uncertain detections.
+- Duplicate overlapping boxes are filtered using intersection-over-union.
+- Occupancy and vacancy percentages exclude uncertain slots. Empty detections
+  return no percentages instead of dividing by zero.
+- Original and annotated images are shown separately.
+- Analysis timestamp and confidence-ranked vacant-slot recommendations are
+  recorded. No entrance distance or live occupancy is invented.
+
+VISUAL SLOT GUIDANCE
+-------------------
+- On an analysis detail page, users can toggle bounding boxes and labels.
+- A vacant slot can be selected and highlighted with a dashed visual pointer.
+- The pointer is not a validated indoor driving route. The project does not
+  have parking-lane geometry, entrance coordinates or a safety model.
+
+GOOGLE MAPS PARKING FINDER
+--------------------------
+- Dashboard integration for Google Maps JavaScript API, Places API (New), and
+  Routes API.
+- User location is requested only after the user presses the location button.
+- Manual place/address search and adjustable search radius are supported.
+- Nearby results are filtered for missing coordinates and duplicates.
+- Facilities are ranked by straight-line distance until a route is requested.
+- Selecting a facility can request and display a Google driving route, route
+  distance, estimated duration and available route instructions.
+- Facility parking availability is displayed as unknown; Places data is not
+  treated as a live occupancy feed.
+- Without a configured browser key, the dashboard displays setup instructions
+  and the remaining application stays usable.
+
+HISTORY AND ANALYTICS
+--------------------
+- Historical charts use stored observations only.
+- A moving-average occupancy estimate requires at least five classified
+  observations and shows the sample range and comparable-camera assumption.
+- No sample history or random predictions are generated.
+
+TESTED IN THIS PROJECT ENVIRONMENT
+----------------------------------
+- Automated test suite: 10 tests passed.
+- Python source compilation passed.
+- JavaScript syntax checks passed.
+- Flask app started; login and registration returned HTTP 200.
+- Google Maps live requests were not tested because no Maps key was configured.
+- Loaded the local PKLot checkpoint and verified vacant/occupied names.
+- One publisher showcase-image smoke test returned 272 detections (169 vacant,
+  103 occupied); this is not an independent accuracy evaluation.
+
+SETUP REQUIRED FOR FULL EXTERNAL FEATURES
+-----------------------------------------
+- Install dependencies with: pip install -r requirements.txt
+- Fresh clones must download compatible weights and configure PARKVISION_WEIGHTS.
+- Configure GOOGLE_MAPS_BROWSER_KEY with a browser key restricted by HTTP
+  referrer and by enabled Maps APIs. Google Maps requires billing and may incur
+  charges. See README.md for setup instructions.
